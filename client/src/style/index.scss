@@ -1,0 +1,109 @@
+@import url("https://fonts.googleapis.com/css2?family=Paprika&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Paprika", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+// Global Color Start ==============>>>>>>
+$dark: #000000e6;
+$light: #8585850f;
+$white: #fff;
+
+$light_text: #ffffff57;
+
+$primary: #3ee27a;
+$primaryLight: #99ffee;
+
+$input_bg: #ffffff17;
+
+// Global Color End ==============>>>>>>
+
+@import "./App.scss";
+
+// Global Style Start =============>>>>
+p {
+  font-size: 12px;
+}
+a {
+  font-size: 12px;
+  text-decoration: none;
+  color: $primary;
+}
+img {
+  width: 100%;
+  display: flex;
+}
+
+label {
+  cursor: pointer;
+}
+
+svg {
+  display: flex;
+}
+
+input {
+  outline: none;
+  border: none;
+  padding: 10px 20px;
+  background: $input_bg;
+  border-radius: 5px;
+}
+
+.fill_btn {
+  width: 100%;
+  outline: none;
+  padding: 10px 0;
+  background: $primary;
+  cursor: pointer;
+  border: none;
+  color: $white;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  transition: 0.5s;
+
+  &:hover {
+    border: 1px solid $primary;
+    color: $primary;
+    background: transparent;
+  }
+}
+
+.text_btn {
+  width: fit-content;
+  outline: none;
+  padding: 2px 5px;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  color: $white;
+  border-bottom: 1px solid transparent;
+  transition: 0.5s;
+  font-size: 12px;
+
+  &:hover {
+    border-bottom: 1px solid $primary;
+    color: $primary;
+    background: transparent;
+  }
+}
+// Global Style End =============>>>>
+
+
+
+
+// Tostify Style Start =============>>>>
+.Toastify{
+  font-size: 12px;
+
+  .Toastify__toast-body{
+    padding: 0;
+    margin: 0 0;
+  }
+}
+// Tostify Style End =============>>>>

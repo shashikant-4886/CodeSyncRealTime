@@ -1,0 +1,97 @@
+// Home Page Style Start ==================>>>
+.home_page {
+  width: 100%;
+  height: 100vh;
+  background: $dark;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .form {
+    background: $light;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px 30px;
+    border-radius: 5px;
+    box-shadow: rgba($color: $primaryLight, $alpha: 0.1) 0px 0px 5px 0px;
+
+    .logo {
+      margin-bottom: 20px;
+
+      h2 {
+        font-weight: 900;
+        color: $primary;
+      }
+      p {
+        color: $white;
+        margin-top: 5px;
+        font-size: 12px;
+      }
+    }
+
+    .join_form {
+      .input {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+
+        label {
+          color: $light_text;
+          font-size: 12px;
+        }
+        input {
+          margin-top: 5px;
+          color: $white;
+        }
+      }
+
+      .join {
+        margin-top: 20px;
+      }
+    }
+
+    .message {
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      p {
+        color: $light_text;
+      }
+    }
+  }
+}
+// Home Page Style End ==================>>>
+
+// editor Page Style Style ==================>>>
+.editor {
+  width: 100%;
+  height: 100vh;
+  background: $dark;
+
+  .sidePanal {
+    background: $light;
+    width: 100%;
+    max-width: 300px;
+    padding: 30px 30px;
+    height: 100%;
+    border-radius: 5px;
+    box-shadow: rgba($color: $primaryLight, $alpha: 0.1) 0px 0px 5px 0px;
+
+    .logo {
+      margin-bottom: 20px;
+
+      h2 {
+        font-weight: 900;
+        color: $primary;
+      }
+      p {
+        color: $white;
+        margin-top: 5px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+// editor Page Style End ==================>>>
