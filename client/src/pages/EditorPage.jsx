@@ -1,18 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import ConnectedUserCard from "../components/ConnectedUserCard";
 import EditorCode from "../components/EditorCode";
 import Confirm from "../components/Confirm";
+import { initSocket } from "../socket.io/socket";
+import { ACTIONS } from "../socket.io/actions";
 
 const EditorPage = () => {
-  const { room_id } = useParams();
   const { state: userData } = useLocation();
   const { userName } = userData;
+  const { room_id } = useParams();
 
   const [leavRoomPopup, setLeavRoomPopup] = useState(false);
 
+  const SocketRef = useRef(null);
+
+  const init = async () => {
+    SocketRef.current = await initSocket();
+
+    SocketRef.current.emit(ACTIONS.JOIN, {
+      room_id: room_id,
+      userName: userName,
+    });
+  };
+
   useEffect(() => {
-    console.log(room_id, userName);
+    init();
   }, []);
 
   return (
@@ -29,11 +42,6 @@ const EditorPage = () => {
               <h4>Connected Users</h4>
 
               <div className="users">
-                <ConnectedUserCard />
-                <ConnectedUserCard />
-                <ConnectedUserCard />
-                <ConnectedUserCard />
-                <ConnectedUserCard />
                 <ConnectedUserCard />
                 <ConnectedUserCard />
                 <ConnectedUserCard />
