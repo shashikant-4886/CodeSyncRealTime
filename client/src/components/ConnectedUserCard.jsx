@@ -1,9 +1,9 @@
 import React from "react";
 
-const ConnectedUserCard = () => {
+const ConnectedUserCard = ({ data }) => {
   return (
-    <div className="user" title="User Name Shashikant">
-      SK
+    <div className="user" title={data?.userName}>
+      {data?.userName?.slice(0,3)}
     </div>
   );
 };

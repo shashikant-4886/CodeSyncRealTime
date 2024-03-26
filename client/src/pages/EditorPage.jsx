@@ -1,26 +1,53 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ConnectedUserCard from "../components/ConnectedUserCard";
 import EditorCode from "../components/EditorCode";
 import Confirm from "../components/Confirm";
 import { initSocket } from "../socket.io/socket";
 import { ACTIONS } from "../socket.io/actions";
+import { toast } from "react-toastify";
 
 const EditorPage = () => {
   const { state: userData } = useLocation();
   const { userName } = userData;
   const { room_id } = useParams();
+  const navigate = useNavigate();
+
+  const [clientList, setClientList] = useState([]);
 
   const [leavRoomPopup, setLeavRoomPopup] = useState(false);
 
   const SocketRef = useRef(null);
 
+  const handleError = (err) => {
+    console.log("Connection Error =>>>>>", err);
+    navigate("/");
+    toast.error("Socket Connection Failed !!. Try again Later.");
+  };
+
   const init = async () => {
     SocketRef.current = await initSocket();
+
+    SocketRef.current.on("connect_error", (err) => {
+      return handleError(err);
+    });
+    SocketRef.current.on("connect_failed", (err) => {
+      return handleError(err);
+    });
 
     SocketRef.current.emit(ACTIONS.JOIN, {
       room_id: room_id,
       userName: userName,
+    });
+
+    SocketRef.current.on(ACTIONS.JOINED, (data) => {
+      console.log("DATA =>>>>>>>>>>>>>>>>>>>>>", data);
+      if (userName !== data.userName) {
+        toast.success(`${data.userName} is Join The Our Group !!`);
+      }else{
+        toast.success(`Welcone to the Group ${data.userName} !!`);
+      }
+      setClientList(data.clients);
     });
   };
 
@@ -42,9 +69,11 @@ const EditorPage = () => {
               <h4>Connected Users</h4>
 
               <div className="users">
-                <ConnectedUserCard />
-                <ConnectedUserCard />
-                <ConnectedUserCard />
+                {clientList?.map((client) => {
+                  return (
+                    <ConnectedUserCard key={client.socket_id} data={client} />
+                  );
+                })}
               </div>
             </div>
           </div>
