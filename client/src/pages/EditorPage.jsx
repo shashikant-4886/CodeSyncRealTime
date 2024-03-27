@@ -14,6 +14,7 @@ const EditorPage = () => {
   const navigate = useNavigate();
 
   const [clientList, setClientList] = useState([]);
+  const [code, setCode] = useState("console.log('hello world!');");
 
   const [leavRoomPopup, setLeavRoomPopup] = useState(false);
 
@@ -44,15 +45,33 @@ const EditorPage = () => {
       console.log("DATA =>>>>>>>>>>>>>>>>>>>>>", data);
       if (userName !== data.userName) {
         toast.success(`${data.userName} is Join The Our Group !!`);
-      }else{
+      } else {
         toast.success(`Welcone to the Group ${data.userName} !!`);
       }
       setClientList(data.clients);
+    });
+
+    SocketRef.current.on(ACTIONS.DISCONNECTED, ({ socket_id, userName }) => {
+      toast.error(`${userName} Left the Room !!`);
+
+      setClientList((prev) =>
+        prev.filter((ele) => ele.socket_id !== socket_id)
+      );
+    });
+
+    SocketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+      setCode(code);
     });
   };
 
   useEffect(() => {
     init();
+
+    return () => {
+      SocketRef.current.disconnect();
+      SocketRef.current.off(ACTIONS.JOINED);
+      SocketRef.current.off(ACTIONS.DISCONNECTED);
+    };
   }, []);
 
   return (
@@ -78,7 +97,15 @@ const EditorPage = () => {
             </div>
           </div>
           <div className="side_bar_foot">
-            <button className="fill_btn copy_room_id">Copy Room ID</button>
+            <button
+              className="fill_btn copy_room_id"
+              onClick={() => {
+                navigator.clipboard.writeText(room_id);
+                toast.success("Room ID Copy Successfull !!");
+              }}
+            >
+              Copy Room ID
+            </button>
             <button className="fill_btn" onClick={() => setLeavRoomPopup(true)}>
               Leav Room
             </button>
@@ -86,7 +113,12 @@ const EditorPage = () => {
         </div>
 
         <div className="codeEditor">
-          <EditorCode />
+          <EditorCode
+            room_id={room_id}
+            code={code}
+            setCode={setCode}
+            SocketRef={SocketRef}
+          />
         </div>
       </div>
 

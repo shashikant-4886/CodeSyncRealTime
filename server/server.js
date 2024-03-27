@@ -36,6 +36,24 @@ IO.on("connection", (socket) => {
       });
     }
   });
+
+  socket.on("disconnecting", () => {
+    const rooms = [...socket.rooms];
+
+    for (let room_id of rooms) {
+      socket.in(room_id).emit(SOCKET_ACTIONS.DISCONNECTED, {
+        socket_id: socket.id,
+        userName: userSocketMap[socket.id],
+      });
+    }
+
+    delete userSocketMap[socket.id];
+    socket.leave();
+  });
+
+  socket.on(SOCKET_ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
+    IO.to(roomId).emit(SOCKET_ACTIONS.CODE_CHANGE, { code });
+  });
 });
 
 server.listen(PORT, () => {
