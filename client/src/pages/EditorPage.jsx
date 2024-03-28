@@ -48,7 +48,13 @@ const EditorPage = () => {
       } else {
         toast.success(`Welcone to the Group ${data.userName} !!`);
       }
+
       setClientList(data.clients);
+
+      SocketRef.current.emit(ACTIONS.SYNC_CODE, {
+        socket_id: data.socketId,
+        room_id,
+      });
     });
 
     SocketRef.current.on(ACTIONS.DISCONNECTED, ({ socket_id, userName }) => {
@@ -59,8 +65,8 @@ const EditorPage = () => {
       );
     });
 
-    SocketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
-      setCode(code);
+    SocketRef.current.on(ACTIONS.CODE_CHANGE, ({ code: codeNew }) => {
+      setCode(codeNew);
     });
   };
 
@@ -68,11 +74,19 @@ const EditorPage = () => {
     init();
 
     return () => {
-      SocketRef.current.disconnect();
+      SocketRef.current.disconnect({ roomId: room_id });
       SocketRef.current.off(ACTIONS.JOINED);
       SocketRef.current.off(ACTIONS.DISCONNECTED);
+      SocketRef.current.off(ACTIONS.CODE_CHANGE);
     };
   }, []);
+
+  const leavRoom = () => {
+    navigate("/");
+
+    setLeavRoomPopup((prev) => !prev);
+    toast.success("Your Are Exit Room Successfully !!");
+  };
 
   return (
     <>
@@ -131,7 +145,7 @@ const EditorPage = () => {
           odio officia explicabo provident debitis? Molestiae minima placeat
           delectus sapiente repudiandae.`}
         accept={() => {
-          console.log("accept");
+          leavRoom();
         }}
         reject={() => {
           setLeavRoomPopup((prev) => !prev);
